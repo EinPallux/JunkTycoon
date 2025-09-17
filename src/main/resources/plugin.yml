@@ -8,6 +8,7 @@ depend:
   - Vault
 softdepend:
   - PlayerPoints
+  - PlaceholderAPI
 
 commands:
   junktycoon:
@@ -28,6 +29,10 @@ commands:
     description: Reset a player's JunkTycoon progression
     usage: /junkreset <player>
     permission: junktycoon.admin.reset
+  prestige:
+    description: Open the prestige menu
+    usage: /prestige
+    permission: junktycoon.prestige
 
 permissions:
   junktycoon.use:
@@ -35,6 +40,9 @@ permissions:
     default: true
   junktycoon.boosters:
     description: Allows use of the boosters shop
+    default: true
+  junktycoon.prestige:
+    description: Allows use of the prestige system
     default: true
   junktycoon.admin.reload:
     description: Allows reloading the plugin

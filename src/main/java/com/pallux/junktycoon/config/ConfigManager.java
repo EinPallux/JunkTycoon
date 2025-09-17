@@ -36,6 +36,9 @@ public class ConfigManager {
         // Load shop config
         loadConfig("shop");
 
+        // Load prestige config
+        loadConfig("prestige");
+
         plugin.getLogger().info("All configuration files loaded successfully!");
     }
 
@@ -99,6 +102,10 @@ public class ConfigManager {
 
     public FileConfiguration getShopConfig() {
         return getConfig("shop");
+    }
+
+    public FileConfiguration getPrestigeConfig() {
+        return getConfig("prestige");
     }
 
     // Message formatting method

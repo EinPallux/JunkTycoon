@@ -62,6 +62,9 @@ public class PlayerDataManager {
         data.setPointFinderPerkLevel(config.getInt("perks.point_finder", 0));
         data.setXpMultiplierPerkLevel(config.getInt("perks.xp_multiplier", 0));
 
+        // Load prestige data
+        data.setPrestigeLevel(config.getInt("prestige.level", 0));
+
         // Load statistics
         data.setTotalTrashPicked(config.getInt("stats.total_trash", 0));
         data.setTotalMoneyEarned(config.getDouble("stats.total_money", 0.0));
@@ -80,6 +83,7 @@ public class PlayerDataManager {
         data.setRarityPerkLevel(0);
         data.setPointFinderPerkLevel(0);
         data.setXpMultiplierPerkLevel(0);
+        data.setPrestigeLevel(0);
         data.setTotalTrashPicked(0);
         data.setTotalMoneyEarned(0.0);
         return data;
@@ -104,6 +108,9 @@ public class PlayerDataManager {
         config.set("perks.rarity", data.getRarityPerkLevel());
         config.set("perks.point_finder", data.getPointFinderPerkLevel());
         config.set("perks.xp_multiplier", data.getXpMultiplierPerkLevel());
+
+        // Save prestige data
+        config.set("prestige.level", data.getPrestigeLevel());
 
         // Save statistics
         config.set("stats.total_trash", data.getTotalTrashPicked());

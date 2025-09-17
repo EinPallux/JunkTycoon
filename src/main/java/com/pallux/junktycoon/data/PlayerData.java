@@ -19,6 +19,9 @@ public class PlayerData {
     private int pointFinderPerkLevel;
     private int xpMultiplierPerkLevel;
 
+    // Prestige Data
+    private int prestigeLevel;
+
     // Statistics
     private int totalTrashPicked;
     private double totalMoneyEarned;
@@ -102,6 +105,14 @@ public class PlayerData {
 
     public void setXpMultiplierPerkLevel(int xpMultiplierPerkLevel) {
         this.xpMultiplierPerkLevel = xpMultiplierPerkLevel;
+    }
+
+    public int getPrestigeLevel() {
+        return prestigeLevel;
+    }
+
+    public void setPrestigeLevel(int prestigeLevel) {
+        this.prestigeLevel = prestigeLevel;
     }
 
     public int getTotalTrashPicked() {

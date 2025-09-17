@@ -1,0 +1,146 @@
+# Prestige Configuration File
+# Prestige System Settings
+
+prestige:
+  # Maximum prestige level available
+  max_level: 10
+
+  # GUI Settings
+  gui:
+    title: "&6&lPrestige System"
+    size: 45  # Must be multiple of 9
+
+  # Bonuses per prestige level
+  bonuses:
+    money_multiplier_per_level: 0.10  # 10% per level (0.10 = 10%)
+    xp_multiplier_start_level: 5      # From which prestige level XP bonus starts
+    xp_multiplier_per_level: 1        # Flat XP bonus per level (from level 5+)
+
+# Requirements to unlock each prestige level
+requirements:
+  prestige_1:
+    trash_pick_tier: "gods"        # Must have Pick of the Gods
+    minimum_level: 100             # Must be at least level 100 with Pick of the Gods
+
+  prestige_2:
+    trash_pick_tier: "gods"
+    minimum_level: 150
+
+  prestige_3:
+    trash_pick_tier: "gods"
+    minimum_level: 200
+
+  prestige_4:
+    trash_pick_tier: "gods"
+    minimum_level: 250
+
+  prestige_5:
+    trash_pick_tier: "gods"
+    minimum_level: 300
+
+  prestige_6:
+    trash_pick_tier: "gods"
+    minimum_level: 350
+
+  prestige_7:
+    trash_pick_tier: "gods"
+    minimum_level: 400
+
+  prestige_8:
+    trash_pick_tier: "gods"
+    minimum_level: 450
+
+  prestige_9:
+    trash_pick_tier: "gods"
+    minimum_level: 500
+
+  prestige_10:
+    trash_pick_tier: "gods"
+    minimum_level: 550
+
+# GUI Items and Layout
+gui_items:
+  # Current prestige display
+  current_prestige:
+    slot: 13
+    material: "NETHER_STAR"
+    name: "&6&lYour Current Prestige"
+    lore:
+      - "&7Current Level: &6Prestige %current_level%"
+      - "&7Money Bonus: &a+%money_bonus%"
+      - "&7XP Bonus: &b+%xp_bonus%"
+      - ""
+      - "&7Total Trash Picked: &f%total_trash%"
+      - "&7Total Money Earned: &f%total_money%"
+
+  # Next prestige display
+  next_prestige:
+    slot: 31
+    material: "END_CRYSTAL"
+    name: "&e&lNext Prestige Level"
+    lore_available:
+      - "&7Next Level: &6Prestige %next_level%"
+      - "&7Next Money Bonus: &a+%next_money_bonus%"
+      - "&7Next XP Bonus: &b+%next_xp_bonus%"
+      - ""
+      - "&6Requirements:"
+      - "&7• Trash Pick: &f%required_tier%"
+      - "&7• Minimum Level: &f%required_level%"
+      - ""
+      - "&7Current Progress:"
+      - "&7• Your Pick: &f%current_tier%"
+      - "&7• Your Level: &f%current_level%"
+      - ""
+      - "&a✓ Requirements met!"
+      - ""
+      - "&c&l⚠ WARNING: This will reset ALL progress!"
+      - "&c• Your trash pick will return to Tier 1"
+      - "&c• All perk levels will be reset to 0"
+      - "&c• XP and level will be reset"
+      - "&c• Statistics will be kept"
+      - ""
+      - "&e▶ Click to prestige!"
+
+    lore_locked:
+      - "&7Next Level: &6Prestige %next_level%"
+      - "&7Next Money Bonus: &a+%next_money_bonus%"
+      - "&7Next XP Bonus: &b+%next_xp_bonus%"
+      - ""
+      - "&6Requirements:"
+      - "&7• Trash Pick: &f%required_tier%"
+      - "&7• Minimum Level: &f%required_level%"
+      - ""
+      - "&7Current Progress:"
+      - "&7• Your Pick: &f%current_tier%"
+      - "&7• Your Level: &f%current_level%"
+      - ""
+      - "&c✗ Requirements not met!"
+
+    lore_maxed:
+      - "&6You have reached maximum prestige!"
+      - "&7Maximum Level: &6Prestige %max_level%"
+      - "&7Current Money Bonus: &a+%money_bonus%"
+      - "&7Current XP Bonus: &b+%xp_bonus%"
+      - ""
+      - "&6🏆 Congratulations on reaching max prestige!"
+
+# Messages
+messages:
+  prestige_success: "&6&l🌟 PRESTIGE UP! 🌟"
+  prestige_success_subtitle: "&7You are now &6Prestige %level%&7!"
+  prestige_announcement: "&6&l[PRESTIGE] &e%player% &7has reached &6Prestige %level%&7! &f+%money_bonus% &7money bonus!"
+  prestige_failed: "&cYou don't meet the requirements to prestige!"
+  already_max_prestige: "&cYou are already at maximum prestige level!"
+
+# Prestige Level Names/Display
+level_names:
+  1: "&6⭐ Prestige I"
+  2: "&6⭐⭐ Prestige II"
+  3: "&6⭐⭐⭐ Prestige III"
+  4: "&e⭐⭐⭐⭐ Prestige IV"
+  5: "&e⭐⭐⭐⭐⭐ Prestige V"
+  6: "&a⭐⭐⭐⭐⭐⭐ Prestige VI"
+  7: "&a⭐⭐⭐⭐⭐⭐⭐ Prestige VII"
+  8: "&b⭐⭐⭐⭐⭐⭐⭐⭐ Prestige VIII"
+  9: "&b⭐⭐⭐⭐⭐⭐⭐⭐⭐ Prestige IX"
+  10: "&5&l⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ Prestige X"

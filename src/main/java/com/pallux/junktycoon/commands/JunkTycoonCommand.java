@@ -128,6 +128,7 @@ public class JunkTycoonCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§6=== Plugin Hooks ===");
         sender.sendMessage("§7Vault: §a✓ Connected");
         sender.sendMessage("§7PlayerPoints: " + (plugin.getPlayerPointsHook().isEnabled() ? "§a✓ Connected" : "§c✗ Not found"));
+        sender.sendMessage("§7PlaceholderAPI: " + (plugin.getPlaceholderAPIHook().isEnabled() ? "§a✓ Connected" : "§c✗ Not found"));
     }
 
     @Override

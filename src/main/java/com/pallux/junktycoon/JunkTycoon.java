@@ -4,17 +4,20 @@ import com.pallux.junktycoon.commands.JunkTycoonCommand;
 import com.pallux.junktycoon.commands.JunkReloadCommand;
 import com.pallux.junktycoon.commands.BoostersCommand;
 import com.pallux.junktycoon.commands.JunkResetCommand;
+import com.pallux.junktycoon.commands.PrestigeCommand;
 import com.pallux.junktycoon.config.ConfigManager;
 import com.pallux.junktycoon.data.PlayerData;
 import com.pallux.junktycoon.data.PlayerDataManager;
 import com.pallux.junktycoon.hooks.PlayerPointsHook;
 import com.pallux.junktycoon.hooks.VaultHook;
+import com.pallux.junktycoon.hooks.PlaceholderAPIHook;
 import com.pallux.junktycoon.listeners.PlayerInteractListener;
 import com.pallux.junktycoon.listeners.PlayerJoinListener;
 import com.pallux.junktycoon.listeners.InventoryListener;
 import com.pallux.junktycoon.managers.TrashPickManager;
 import com.pallux.junktycoon.managers.TrashManager;
 import com.pallux.junktycoon.managers.BoosterManager;
+import com.pallux.junktycoon.managers.PrestigeManager;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -35,8 +38,10 @@ public final class JunkTycoon extends JavaPlugin {
     private TrashPickManager trashPickManager;
     private TrashManager trashManager;
     private BoosterManager boosterManager;
+    private PrestigeManager prestigeManager;
     private VaultHook vaultHook;
     private PlayerPointsHook playerPointsHook;
+    private PlaceholderAPIHook placeholderAPIHook;
 
     @Override
     public void onEnable() {
@@ -54,6 +59,7 @@ public final class JunkTycoon extends JavaPlugin {
         trashPickManager = new TrashPickManager(this);
         trashManager = new TrashManager(this);
         boosterManager = new BoosterManager(this);
+        prestigeManager = new PrestigeManager(this);
 
         // Register listeners
         registerListeners();
@@ -75,6 +81,9 @@ public final class JunkTycoon extends JavaPlugin {
         if (boosterManager != null) {
             boosterManager.shutdown();
         }
+        if (placeholderAPIHook != null) {
+            placeholderAPIHook.shutdown();
+        }
         getLogger().info("JunkTycoon has been disabled!");
     }
 
@@ -90,6 +99,10 @@ public final class JunkTycoon extends JavaPlugin {
         // Setup PlayerPoints hook (optional)
         playerPointsHook = new PlayerPointsHook(this);
         playerPointsHook.setupPlayerPoints();
+
+        // Setup PlaceholderAPI hook (optional)
+        placeholderAPIHook = new PlaceholderAPIHook(this);
+        placeholderAPIHook.setupPlaceholderAPI();
     }
 
     private void registerListeners() {
@@ -103,6 +116,7 @@ public final class JunkTycoon extends JavaPlugin {
         getCommand("junkreload").setExecutor(new JunkReloadCommand(this));
         getCommand("boosters").setExecutor(new BoostersCommand(this));
         getCommand("junkreset").setExecutor(new JunkResetCommand(this));
+        getCommand("prestige").setExecutor(new PrestigeCommand(this));
     }
 
     private void startCooldownUpdateTask() {
@@ -196,6 +210,7 @@ public final class JunkTycoon extends JavaPlugin {
         trashPickManager.reload();
         trashManager.reload();
         boosterManager.reload();
+        prestigeManager.reload();
     }
 
     // Getters
@@ -223,11 +238,19 @@ public final class JunkTycoon extends JavaPlugin {
         return boosterManager;
     }
 
+    public PrestigeManager getPrestigeManager() {
+        return prestigeManager;
+    }
+
     public VaultHook getVaultHook() {
         return vaultHook;
     }
 
     public PlayerPointsHook getPlayerPointsHook() {
         return playerPointsHook;
+    }
+
+    public PlaceholderAPIHook getPlaceholderAPIHook() {
+        return placeholderAPIHook;
     }
 }

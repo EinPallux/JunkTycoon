@@ -72,12 +72,14 @@ public class PlayerInteractListener implements Listener {
         int trashValue = plugin.getTrashManager().generateTrashValue(trashType);
         int totalValue = trashValue * trashAmount;
 
-        // Give money
-        plugin.getVaultHook().depositMoney(player, totalValue);
+        // Give money with prestige bonus
+        double prestigeMoneyMultiplier = plugin.getPrestigeManager().getMoneyMultiplier(playerData.getPrestigeLevel());
+        double finalMoneyAmount = totalValue * prestigeMoneyMultiplier;
+        plugin.getVaultHook().depositMoney(player, finalMoneyAmount);
 
         // Update player data
         playerData.addTrashPicked(trashAmount);
-        playerData.addMoneyEarned(totalValue);
+        playerData.addMoneyEarned(finalMoneyAmount);
 
         // Give XP only if not at max level for current tier
         TrashPickTier currentTier = plugin.getTrashPickManager().getTier(playerData.getTrashPickTier());
@@ -96,7 +98,11 @@ public class PlayerInteractListener implements Listener {
 
             // Apply global XP booster if active
             double xpBoosterMultiplier = plugin.getBoosterManager().getBoosterMultiplier("xp");
-            xpGain = (int) (baseXP * xpBoosterMultiplier);
+            int boostedXP = (int) (baseXP * xpBoosterMultiplier);
+
+            // Apply prestige XP bonus (flat bonus)
+            int prestigeXPBonus = plugin.getPrestigeManager().getXPBonus(playerData.getPrestigeLevel());
+            xpGain = boostedXP + prestigeXPBonus;
 
             playerData.addXP(xpGain);
 
@@ -107,7 +113,7 @@ public class PlayerInteractListener implements Listener {
         }
 
         // Display trash found message
-        displayTrashFoundMessage(player, trashType, trashAmount, totalValue, xpGain);
+        displayTrashFoundMessage(player, trashType, trashAmount, (int) finalMoneyAmount, xpGain);
 
         // Play effects
         playTrashEffects(player, trashType);
