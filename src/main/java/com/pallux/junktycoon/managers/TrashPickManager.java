@@ -6,6 +6,7 @@ import com.pallux.junktycoon.models.TrashPickTier;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -69,6 +70,15 @@ public class TrashPickManager {
         if (meta != null) {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', tier.getName()));
             meta.setLore(createTrashPickLore(playerData, tier));
+
+            // Hide enchantments, attributes, and other flags
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+            meta.addItemFlags(ItemFlag.HIDE_DYE);
+
             item.setItemMeta(meta);
         }
 
