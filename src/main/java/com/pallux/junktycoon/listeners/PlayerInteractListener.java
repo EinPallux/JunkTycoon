@@ -4,6 +4,7 @@ import com.pallux.junktycoon.JunkTycoon;
 import com.pallux.junktycoon.data.PlayerData;
 import com.pallux.junktycoon.guis.UpgradeGUI;
 import com.pallux.junktycoon.models.TrashType;
+import com.pallux.junktycoon.models.TrashPickTier;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -78,13 +79,26 @@ public class PlayerInteractListener implements Listener {
         playerData.addTrashPicked(trashAmount);
         playerData.addMoneyEarned(totalValue);
 
-        // Give XP
-        int xpGain = plugin.getTrashPickManager().getXPForTrashType(trashType.getId()) * trashAmount;
-        playerData.addXP(xpGain);
+        // Give XP only if not at max level for current tier
+        TrashPickTier currentTier = plugin.getTrashPickManager().getTier(playerData.getTrashPickTier());
+        boolean canGainXP = true;
 
-        // Check for level up
-        if (plugin.getTrashPickManager().canLevelUp(playerData)) {
-            plugin.getTrashPickManager().levelUp(player, playerData);
+        if (currentTier != null && currentTier.getMaxLevel() != -1) {
+            // Check if already at max level for this tier (-1 means infinite levels)
+            if (playerData.getTrashPickLevel() >= currentTier.getMaxLevel()) {
+                canGainXP = false;
+            }
+        }
+
+        int xpGain = 0;
+        if (canGainXP) {
+            xpGain = plugin.getTrashPickManager().getXPForTrashType(trashType.getId()) * trashAmount;
+            playerData.addXP(xpGain);
+
+            // Check for level up
+            if (plugin.getTrashPickManager().canLevelUp(playerData)) {
+                plugin.getTrashPickManager().levelUp(player, playerData);
+            }
         }
 
         // Display trash found message
