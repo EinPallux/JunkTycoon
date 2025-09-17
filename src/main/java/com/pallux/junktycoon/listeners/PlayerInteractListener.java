@@ -62,7 +62,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        // Update last pick time
+        // Update last pick time IMMEDIATELY
         playerData.setLastPickTime(System.currentTimeMillis());
 
         // Generate trash
@@ -99,7 +99,12 @@ public class PlayerInteractListener implements Listener {
         // Update trash pick in inventory
         plugin.getTrashPickManager().updateTrashPickInInventory(player);
 
-        // Save player data
+        // Immediately update cooldown indicator
+        plugin.getServer().getScheduler().runTask(plugin, () -> {
+            plugin.updateCooldownIndicator(player);
+        });
+
+        // Save player data immediately to ensure timestamp is persisted
         plugin.getPlayerDataManager().savePlayerData(player);
     }
 
@@ -110,20 +115,17 @@ public class PlayerInteractListener implements Listener {
 
         long currentTime = System.currentTimeMillis();
         long lastPickTime = playerData.getLastPickTime();
-        double cooldown = calculateCooldown(playerData);
 
-        return (currentTime - lastPickTime) >= (cooldown * 1000);
-    }
+        // If it's the first time picking (lastPickTime = 0), allow it
+        if (lastPickTime == 0) {
+            return true;
+        }
 
-    private long getRemainingCooldown(PlayerData playerData) {
-        long currentTime = System.currentTimeMillis();
-        long lastPickTime = playerData.getLastPickTime();
-        double cooldown = calculateCooldown(playerData);
+        double cooldownSeconds = calculateCooldown(playerData);
+        long cooldownMs = (long) (cooldownSeconds * 1000);
+        long timePassed = currentTime - lastPickTime;
 
-        long timePassedMs = currentTime - lastPickTime;
-        long requiredMs = (long) (cooldown * 1000);
-
-        return Math.max(0, requiredMs - timePassedMs);
+        return timePassed >= cooldownMs;
     }
 
     private double calculateCooldown(PlayerData playerData) {
@@ -137,6 +139,22 @@ public class PlayerInteractListener implements Listener {
         }
 
         return baseCooldown;
+    }
+
+    private long getRemainingCooldown(PlayerData playerData) {
+        long currentTime = System.currentTimeMillis();
+        long lastPickTime = playerData.getLastPickTime();
+
+        // If never picked before, no cooldown
+        if (lastPickTime == 0) {
+            return 0;
+        }
+
+        double cooldownSeconds = calculateCooldown(playerData);
+        long cooldownMs = (long) (cooldownSeconds * 1000);
+        long timePassed = currentTime - lastPickTime;
+
+        return Math.max(0, cooldownMs - timePassed);
     }
 
     private void displayTrashFoundMessage(Player player, TrashType trashType, int amount, int value, int xp) {

@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.ChatColor;
 
@@ -68,10 +69,71 @@ public class TrashPickManager {
         if (meta != null) {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', tier.getName()));
             meta.setLore(createTrashPickLore(playerData, tier));
+
+            // Add cooldown indicator using durability
+            applyCooldownIndicator(item, meta, player, playerData);
+
             item.setItemMeta(meta);
         }
 
         return item;
+    }
+
+    private void applyCooldownIndicator(ItemStack item, ItemMeta meta, Player player, PlayerData playerData) {
+        // Don't apply cooldown indicator if player has bypass permission
+        if (player.hasPermission("junktycoon.admin.nocooldown")) {
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        long lastPickTime = playerData.getLastPickTime();
+
+        // If never picked before, no cooldown
+        if (lastPickTime == 0) {
+            return;
+        }
+
+        double cooldownSeconds = calculateCooldownForPlayer(playerData);
+        long cooldownMs = (long) (cooldownSeconds * 1000);
+        long timePassed = currentTime - lastPickTime;
+        long remainingMs = Math.max(0, cooldownMs - timePassed);
+
+        // If no cooldown remaining, don't apply durability
+        if (remainingMs <= 0) {
+            return;
+        }
+
+        // Calculate cooldown percentage (0.0 = full cooldown, 1.0 = no cooldown)
+        double cooldownPercentage = 1.0 - ((double) remainingMs / (double) cooldownMs);
+
+        // Apply durability damage based on cooldown
+        // When cooldown is active (percentage close to 0), durability should be low
+        // When cooldown is almost done (percentage close to 1), durability should be high
+
+        if (meta instanceof Damageable damageable) {
+            short maxDurability = item.getType().getMaxDurability();
+            if (maxDurability > 0) {
+                short durabilityDamage = (short) (maxDurability * (1.0 - cooldownPercentage));
+                // Ensure we don't break the item completely
+                durabilityDamage = (short) Math.min(durabilityDamage, maxDurability - 1);
+
+                damageable.setDamage(durabilityDamage);
+                meta.setUnbreakable(true); // Prevent the item from actually breaking
+            }
+        }
+    }
+
+    private double calculateCooldownForPlayer(PlayerData playerData) {
+        double baseCooldown = plugin.getConfigManager().getMainConfig().getDouble("settings.default_picking_cooldown", 2.0);
+
+        int cooldownPerkLevel = playerData.getCooldownPerkLevel();
+        if (cooldownPerkLevel > 0) {
+            double reductionPerLevel = plugin.getConfigManager().getMainConfig().getDouble("perks.picking_cooldown.cooldown_reduction", 0.1);
+            double reduction = cooldownPerkLevel * reductionPerLevel;
+            baseCooldown = Math.max(0.1, baseCooldown - reduction);
+        }
+
+        return baseCooldown;
     }
 
     private List<String> createTrashPickLore(PlayerData playerData, TrashPickTier tier) {
