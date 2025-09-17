@@ -1,0 +1,130 @@
+# Messages Configuration File
+# All plugin messages and notifications
+
+# General Messages
+general:
+  prefix: "&8[&6JunkTycoon&8] "
+  no_permission: "&cYou don't have permission to do that!"
+  player_only: "&cThis command can only be used by players!"
+  reload_success: "&aJunkTycoon has been reloaded successfully!"
+
+# Trash Finding Messages
+trash_finding:
+  # Title and subtitle when finding trash
+  found_title: "&6Found: %amount%x %rarity%"
+  found_subtitle: "&7Worth: &a$%value%"
+
+  # Chat messages (optional, disabled by default)
+  chat_message:
+    enabled: false
+    format: "&7You found &f%amount%x %rarity% &7worth &a$%value%&7!"
+
+  # Cooldown message
+  cooldown: "&cYou must wait &f%time% &cseconds before picking again!"
+
+  # XP gain message
+  xp_gain: "&b+%xp% XP"
+
+  # Level up message
+  level_up: "&6&lLEVEL UP! &7Your trash pick is now level &a%level%&7!"
+
+# Points (PlayerPoints) Messages
+points:
+  found_title: "&9Found: %amount% Points!"
+  found_subtitle: "&7Lucky find!"
+  chat_message: "&7You found &9%amount% points &7while picking trash!"
+
+# Upgrade GUI Messages
+upgrade_gui:
+  # GUI item names and lore
+  perk_unlocked: "&a%perk_name% &7- Level %level%"
+  perk_locked: "&c%perk_name% &7- Locked"
+  perk_maxed: "&6%perk_name% &7- MAX LEVEL"
+
+  perk_lore:
+    - "&7%description%"
+    - ""
+    - "&7Current Level: &f%current_level%&7/&f%max_level%"
+    - "&7Cost to upgrade: &a$%cost%"
+    - ""
+    - "&e▶ Click to upgrade!"
+
+  perk_lore_locked:
+    - "&7%description%"
+    - ""
+    - "&7Level: &c0&7/&f%max_level%"
+    - "&7Cost to unlock: &a$%cost%"
+    - ""
+    - "&e▶ Click to unlock!"
+
+  perk_lore_maxed:
+    - "&7%description%"
+    - ""
+    - "&7Level: &6MAX"
+    - ""
+    - "&c✗ Already maxed out!"
+
+  # Trash pick upgrade
+  trash_pick_upgrade:
+    name: "&a&lUpgrade Trash Pick"
+    lore:
+      - "&7Upgrade to the next tier!"
+      - ""
+      - "&7Current: %current_pick%"
+      - "&7Next: %next_pick%"
+      - ""
+      - "&7Required Level: &f%required_level%"
+      - "&7Your Level: &f%current_level%"
+      - "&7Cost: &a$%cost%"
+      - ""
+      - "&e▶ Click to upgrade!"
+
+  trash_pick_upgrade_locked:
+    name: "&c&lUpgrade Trash Pick"
+    lore:
+      - "&7Upgrade to the next tier!"
+      - ""
+      - "&7Current: %current_pick%"
+      - "&7Next: %next_pick%"
+      - ""
+      - "&cRequired Level: &f%required_level%"
+      - "&cYour Level: &f%current_level%"
+      - "&7Cost: &a$%cost%"
+      - ""
+      - "&c✗ Level requirement not met!"
+
+  trash_pick_maxed:
+    name: "&6&lTrash Pick - MAX TIER"
+    lore:
+      - "&7You have the best trash pick!"
+      - ""
+      - "&7Current: %current_pick%"
+      - ""
+      - "&6✓ Maximum tier reached!"
+
+# Error Messages
+errors:
+  insufficient_funds: "&cYou don't have enough money! Required: &a$%required%"
+  perk_maxed: "&cThis perk is already at maximum level!"
+  pick_maxed: "&cYour trash pick is already at maximum tier!"
+  level_requirement: "&cYou need to reach level &f%required% &cfirst!"
+
+# Success Messages
+success:
+  perk_upgraded: "&aSuccessfully upgraded %perk_name% &ato level &f%level%&a!"
+  pick_upgraded: "&aSuccessfully upgraded your trash pick to &f%pick_name%&a!"
+
+# Trash Pick Lore
+trash_pick_lore:
+  - "&7Level: &f%level%&7/&f%max_level%"
+  - "&7XP: &f%xp%&7/&f%required_xp%"
+  - "&7Tier: &f%tier%"
+  - ""
+  - "&6Perks:"
+  - "&7• Cooldown Reduction: &f%cooldown_level%"
+  - "&7• Trash Multiplier: &f%multiplier_level%"
+  - "&7• Trash Rarity: &f%rarity_level%"
+  - "&7• Point Finder: &f%points_level%"
+  - ""
+  - "&e▶ Right-click to open upgrades"
+  - "&e▶ Left-click to pick trash"

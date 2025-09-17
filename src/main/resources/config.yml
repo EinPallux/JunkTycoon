@@ -1,0 +1,124 @@
+# JunkTycoon Configuration File
+# Plugin by Pallux
+
+# General Settings
+settings:
+  # Default cooldown for picking trash (in seconds)
+  default_picking_cooldown: 2.0
+  # Slot in hotbar where trash pick is locked (0-8)
+  locked_hotbar_slot: 0
+
+# Trash Pick Tiers Configuration
+trash_picks:
+  # Tier 1 - Starter Pick
+  starter:
+    name: "&aStarter Pick"
+    material: "WOODEN_HOE"
+    level_required: 0
+    max_level: 10
+    upgrade_cost: 0
+
+  # Tier 2 - Sturdy Pick
+  sturdy:
+    name: "&7Sturdy Pick"
+    material: "STONE_HOE"
+    level_required: 10
+    max_level: 50
+    upgrade_cost: 1000
+
+  # Tier 3 - Veteran Pick
+  veteran:
+    name: "&fVeteran Pick"
+    material: "IRON_HOE"
+    level_required: 50
+    max_level: 100
+    upgrade_cost: 5000
+
+  # Tier 4 - Expert Pick
+  expert:
+    name: "&6Expert Pick"
+    material: "GOLDEN_HOE"
+    level_required: 100
+    max_level: 300
+    upgrade_cost: 25000
+
+  # Tier 5 - Masters Pick
+  masters:
+    name: "&bMasters Pick"
+    material: "DIAMOND_HOE"
+    level_required: 300
+    max_level: 500
+    upgrade_cost: 100000
+
+  # Tier 6 - Pick of the Gods (Max Tier)
+  gods:
+    name: "&5&lPick of the Gods"
+    material: "NETHERITE_HOE"
+    level_required: 500
+    max_level: -1  # -1 means infinite
+    upgrade_cost: 500000
+
+# XP Configuration
+xp:
+  # Base XP per trash rarity
+  common: 1
+  uncommon: 3
+  rare: 8
+  epic: 20
+  legendary: 50
+  mythical: 125
+  godlike: 300
+
+  # XP multiplier per level (level * multiplier = xp needed for next level)
+  level_multiplier: 10
+  base_xp_requirement: 100
+
+# Perks Configuration
+perks:
+  picking_cooldown:
+    enabled: true
+    name: "&cPicking Cooldown"
+    description: "&7Reduces trash picking cooldown"
+    max_level: 15
+    base_cost: 150
+    cost_multiplier: 1.5
+    cooldown_reduction: 0.1  # seconds reduced per level
+
+  trash_multiplier:
+    enabled: true
+    name: "&aTrash Multiplier"
+    description: "&7Chance to find multiple trash"
+    max_level: 20
+    base_cost: 500
+    cost_multiplier: 2.0
+
+  trash_rarity:
+    enabled: true
+    name: "&6Trash Rarity"
+    description: "&7Improves rare trash finding chance"
+    max_level: 10
+    base_cost: 1000
+    cost_multiplier: 3.0
+    rarity_boost: 0.05  # 5% boost per level
+
+  point_finder:
+    enabled: true
+    name: "&9Point Finder"
+    description: "&7Chance to find PlayerPoints"
+    max_level: 10
+    base_cost: 20000
+    cost_multiplier: 2.5
+    base_chance: 0.01  # 1% base chance
+    chance_increase: 0.005  # 0.5% increase per level
+    min_points: 1
+    max_points: 5
+
+# Database Settings
+database:
+  type: "YAML"  # Currently only YAML is supported
+  auto_save_interval: 300  # seconds
+
+# GUI Settings
+gui:
+  upgrade_gui_size: 45  # Must be multiple of 9
+  upgrade_gui_title: "&6&lTrash Pick Upgrades"

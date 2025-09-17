@@ -1,0 +1,34 @@
+name: JunkTycoon
+version: '1.0'
+description: A Roblox inspired junk collecting simulator for Minecraft
+author: Pallux
+main: com.pallux.junktycoon.JunkTycoon
+api-version: '1.21'
+depend:
+  - Vault
+softdepend:
+  - PlayerPoints
+
+commands:
+  junktycoon:
+    description: Main JunkTycoon command
+    usage: /junktycoon
+    aliases: [jt, junk]
+    permission: junktycoon.use
+  junkreload:
+    description: Reload the JunkTycoon plugin
+    usage: /junkreload
+    permission: junktycoon.admin.reload
+
+permissions:
+  junktycoon.use:
+    description: Allows use of the JunkTycoon plugin
+    default: true
+  junktycoon.admin.reload:
+    description: Allows reloading the plugin
+    default: op
+  junktycoon.admin.*:
+    description: Gives all admin permissions
+    default: op
+    children:
+      - junktycoon.admin.reload

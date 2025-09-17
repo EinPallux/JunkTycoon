@@ -1,0 +1,76 @@
+# Trash Configuration File
+# Define trash rarities, chances, and values
+
+trash_rarities:
+  common:
+    name: "&7Common Trash"
+    chance: 80.0  # Percentage chance
+    min_value: 1
+    max_value: 3
+    color: "&7"
+
+  uncommon:
+    name: "&aUncommon Trash"
+    chance: 10.0
+    min_value: 5
+    max_value: 10
+    color: "&a"
+
+  rare:
+    name: "&9Rare Trash"
+    chance: 5.0
+    min_value: 15
+    max_value: 25
+    color: "&9"
+
+  epic:
+    name: "&5Epic Trash"
+    chance: 2.0
+    min_value: 35
+    max_value: 60
+    color: "&5"
+
+  legendary:
+    name: "&6Legendary Trash"
+    chance: 0.5
+    min_value: 80
+    max_value: 150
+    color: "&6"
+
+  mythical:
+    name: "&c&lMythical Trash"
+    chance: 0.1
+    min_value: 200
+    max_value: 400
+    color: "&c&l"
+
+  godlike:
+    name: "&4&l&nGodlike Trash"
+    chance: 0.01
+    min_value: 500
+    max_value: 1000
+    color: "&4&l&n"
+
+# Trash finding effects
+effects:
+  # Particle effect when finding trash
+  particles:
+    enabled: true
+    common: "VILLAGER_HAPPY"
+    uncommon: "ENCHANTMENT_TABLE"
+    rare: "HEART"
+    epic: "PORTAL"
+    legendary: "END_ROD"
+    mythical: "DRAGON_BREATH"
+    godlike: "TOTEM"
+
+  # Sound effects when finding trash
+  sounds:
+    enabled: true
+    common: "ENTITY_EXPERIENCE_ORB_PICKUP"
+    uncommon: "ENTITY_PLAYER_LEVELUP"
+    rare: "BLOCK_NOTE_BLOCK_BELL"
+    epic: "BLOCK_BEACON_ACTIVATE"
+    legendary: "ENTITY_ENDER_DRAGON_AMBIENT"
+    mythical: "UI_TOAST_CHALLENGE_COMPLETE"
+    godlike: "ENTITY_WITHER_SPAWN"
