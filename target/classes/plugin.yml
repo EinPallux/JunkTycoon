@@ -19,10 +19,18 @@ commands:
     description: Reload the JunkTycoon plugin
     usage: /junkreload
     permission: junktycoon.admin.reload
+  boosters:
+    description: Open the global boosters shop
+    usage: /boosters
+    aliases: [booster, shop]
+    permission: junktycoon.boosters
 
 permissions:
   junktycoon.use:
     description: Allows use of the JunkTycoon plugin
+    default: true
+  junktycoon.boosters:
+    description: Allows use of the boosters shop
     default: true
   junktycoon.admin.reload:
     description: Allows reloading the plugin

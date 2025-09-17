@@ -2,6 +2,7 @@ package com.pallux.junktycoon;
 
 import com.pallux.junktycoon.commands.JunkTycoonCommand;
 import com.pallux.junktycoon.commands.JunkReloadCommand;
+import com.pallux.junktycoon.commands.BoostersCommand;
 import com.pallux.junktycoon.config.ConfigManager;
 import com.pallux.junktycoon.data.PlayerData;
 import com.pallux.junktycoon.data.PlayerDataManager;
@@ -12,6 +13,7 @@ import com.pallux.junktycoon.listeners.PlayerJoinListener;
 import com.pallux.junktycoon.listeners.InventoryListener;
 import com.pallux.junktycoon.managers.TrashPickManager;
 import com.pallux.junktycoon.managers.TrashManager;
+import com.pallux.junktycoon.managers.BoosterManager;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -31,6 +33,7 @@ public final class JunkTycoon extends JavaPlugin {
     private PlayerDataManager playerDataManager;
     private TrashPickManager trashPickManager;
     private TrashManager trashManager;
+    private BoosterManager boosterManager;
     private VaultHook vaultHook;
     private PlayerPointsHook playerPointsHook;
 
@@ -49,6 +52,7 @@ public final class JunkTycoon extends JavaPlugin {
         playerDataManager = new PlayerDataManager(this);
         trashPickManager = new TrashPickManager(this);
         trashManager = new TrashManager(this);
+        boosterManager = new BoosterManager(this);
 
         // Register listeners
         registerListeners();
@@ -66,6 +70,9 @@ public final class JunkTycoon extends JavaPlugin {
     public void onDisable() {
         if (playerDataManager != null) {
             playerDataManager.saveAllData();
+        }
+        if (boosterManager != null) {
+            boosterManager.shutdown();
         }
         getLogger().info("JunkTycoon has been disabled!");
     }
@@ -93,6 +100,7 @@ public final class JunkTycoon extends JavaPlugin {
     private void registerCommands() {
         getCommand("junktycoon").setExecutor(new JunkTycoonCommand(this));
         getCommand("junkreload").setExecutor(new JunkReloadCommand(this));
+        getCommand("boosters").setExecutor(new BoostersCommand(this));
     }
 
     private void startCooldownUpdateTask() {
@@ -185,6 +193,7 @@ public final class JunkTycoon extends JavaPlugin {
         configManager.loadConfigs();
         trashPickManager.reload();
         trashManager.reload();
+        boosterManager.reload();
     }
 
     // Getters
@@ -206,6 +215,10 @@ public final class JunkTycoon extends JavaPlugin {
 
     public TrashManager getTrashManager() {
         return trashManager;
+    }
+
+    public BoosterManager getBoosterManager() {
+        return boosterManager;
     }
 
     public VaultHook getVaultHook() {

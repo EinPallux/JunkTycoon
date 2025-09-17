@@ -1,0 +1,154 @@
+# Shop Configuration File
+# Global Booster Shop Settings
+
+shop:
+  title: "&6&lGlobal Boosters Shop"
+  size: 45  # Must be multiple of 9
+
+# Global Boosters Configuration
+boosters:
+  # XP Boosters
+  xp_2x_5min:
+    name: "&e&lGlobal XP Booster &7(x2)"
+    material: "EXPERIENCE_BOTTLE"
+    price: 350
+    multiplier: 2.0
+    duration: 300  # 5 minutes in seconds
+    type: "xp"
+    description:
+      - "&7Boosts XP gain for &eALL players"
+      - "&7on the server by &ex2 &7for &e5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash picking XP"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx2"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 10
+
+  xp_3x_5min:
+    name: "&e&lGlobal XP Booster &7(x3)"
+    material: "EXPERIENCE_BOTTLE"
+    price: 950
+    multiplier: 3.0
+    duration: 300
+    type: "xp"
+    description:
+      - "&7Boosts XP gain for &eALL players"
+      - "&7on the server by &ex3 &7for &e5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash picking XP"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx3"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 11
+
+  xp_5x_5min:
+    name: "&e&lGlobal XP Booster &7(x5)"
+    material: "EXPERIENCE_BOTTLE"
+    price: 2500
+    multiplier: 5.0
+    duration: 300
+    type: "xp"
+    description:
+      - "&7Boosts XP gain for &eALL players"
+      - "&7on the server by &ex5 &7for &e5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash picking XP"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx5"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 12
+
+  # Trash Amount Boosters
+  trash_2x_5min:
+    name: "&a&lGlobal Trash Booster &7(x2)"
+    material: "POTION"
+    potion_color: "GREEN"
+    price: 500
+    multiplier: 2.0
+    duration: 300
+    type: "trash"
+    description:
+      - "&7Boosts trash amount for &aALL players"
+      - "&7on the server by &ax2 &7for &a5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash finding amount"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx2"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 28
+
+  trash_3x_5min:
+    name: "&a&lGlobal Trash Booster &7(x3)"
+    material: "POTION"
+    potion_color: "GREEN"
+    price: 1000
+    multiplier: 3.0
+    duration: 300
+    type: "trash"
+    description:
+      - "&7Boosts trash amount for &aALL players"
+      - "&7on the server by &ax3 &7for &a5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash finding amount"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx3"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 29
+
+  trash_5x_5min:
+    name: "&a&lGlobal Trash Booster &7(x5)"
+    material: "POTION"
+    potion_color: "GREEN"
+    price: 4500
+    multiplier: 5.0
+    duration: 300
+    type: "trash"
+    description:
+      - "&7Boosts trash amount for &aALL players"
+      - "&7on the server by &ax5 &7for &a5 minutes"
+      - ""
+      - "&6▪ &7Affects: &fTrash finding amount"
+      - "&6▪ &7Duration: &f5 Minutes"
+      - "&6▪ &7Multiplier: &fx5"
+      - ""
+      - "&7Cost: &9%price% Points"
+      - ""
+      - "&e▶ Right-click to purchase!"
+    slot: 30
+
+# Bossbar Settings
+bossbar:
+  xp_booster:
+    title: "&e⚡ Global XP Booster Active: &fx%multiplier% &e⚡ &7Time: &f%time%"
+    color: "YELLOW"
+    style: "SEGMENTED_10"
+
+  trash_booster:
+    title: "&a⚡ Global Trash Booster Active: &fx%multiplier% &a⚡ &7Time: &f%time%"
+    color: "GREEN"
+    style: "SEGMENTED_10"
+
+# Chat Messages
+messages:
+  purchase_success: "&aSuccessfully purchased &f%booster_name%&a!"
+  insufficient_points: "&cYou don't have enough Points! Required: &9%required% Points"
+  booster_activated: "&6&l[BOOSTER] &e%player% &7activated a &f%booster_name% &7for &f%duration% minutes!"
+  booster_ended: "&6&l[BOOSTER] &7The &f%booster_name% &7has ended!"
+  booster_already_active: "&cA booster of this type is already active! Please wait for it to end."
+  playerpoints_required: "&cPlayerPoints plugin is required to use the booster shop!"

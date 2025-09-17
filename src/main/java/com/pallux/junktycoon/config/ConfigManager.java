@@ -33,6 +33,9 @@ public class ConfigManager {
         // Load messages config
         loadConfig("messages");
 
+        // Load shop config
+        loadConfig("shop");
+
         plugin.getLogger().info("All configuration files loaded successfully!");
     }
 
@@ -92,6 +95,10 @@ public class ConfigManager {
 
     public FileConfiguration getMessagesConfig() {
         return getConfig("messages");
+    }
+
+    public FileConfiguration getShopConfig() {
+        return getConfig("shop");
     }
 
     // Message formatting method

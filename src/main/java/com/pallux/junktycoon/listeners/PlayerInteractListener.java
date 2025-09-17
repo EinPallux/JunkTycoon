@@ -92,7 +92,12 @@ public class PlayerInteractListener implements Listener {
 
         int xpGain = 0;
         if (canGainXP) {
-            xpGain = plugin.getTrashPickManager().getXPForTrashType(trashType.getId(), playerData) * trashAmount;
+            int baseXP = plugin.getTrashPickManager().getXPForTrashType(trashType.getId(), playerData) * trashAmount;
+
+            // Apply global XP booster if active
+            double xpBoosterMultiplier = plugin.getBoosterManager().getBoosterMultiplier("xp");
+            xpGain = (int) (baseXP * xpBoosterMultiplier);
+
             playerData.addXP(xpGain);
 
             // Check for level up

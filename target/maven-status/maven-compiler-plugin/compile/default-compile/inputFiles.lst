@@ -3,6 +3,7 @@ C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\comm
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\models\TrashPickTier.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\hooks\PlayerPointsHook.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\listeners\PlayerJoinListener.java
+C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\managers\BoosterManager.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\managers\TrashPickManager.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\JunkTycoon.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\models\TrashType.java
@@ -12,5 +13,8 @@ C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\data
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\data\PlayerData.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\managers\TrashManager.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\config\ConfigManager.java
+C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\models\ActiveBooster.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\guis\UpgradeGUI.java
+C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\commands\BoostersCommand.java
+C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\guis\BoosterShopGUI.java
 C:\Users\Marvin\IdeaProjects\JunkTycoon\src\main\java\com\pallux\junktycoon\hooks\VaultHook.java

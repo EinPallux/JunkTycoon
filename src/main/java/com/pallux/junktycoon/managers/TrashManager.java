@@ -135,10 +135,16 @@ public class TrashManager {
         PlayerData playerData = plugin.getPlayerDataManager().getPlayerData(player);
         int multiplierLevel = playerData.getMultiplierPerkLevel();
 
-        if (multiplierLevel <= 0) return 1;
+        int baseAmount = 1;
+        if (multiplierLevel > 0) {
+            // Random amount between 1 and multiplier level
+            baseAmount = random.nextInt(multiplierLevel) + 1;
+        }
 
-        // Random amount between 1 and multiplier level
-        return random.nextInt(multiplierLevel) + 1;
+        // Apply global trash booster if active
+        double trashBoosterMultiplier = plugin.getBoosterManager().getBoosterMultiplier("trash");
+
+        return (int) (baseAmount * trashBoosterMultiplier);
     }
 
     public int generateTrashValue(TrashType trashType) {
