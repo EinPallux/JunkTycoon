@@ -17,6 +17,7 @@ com\pallux\junktycoon\managers\BoosterManager$1.class
 com\pallux\junktycoon\models\TrashPickTier.class
 com\pallux\junktycoon\guis\UpgradeGUI.class
 com\pallux\junktycoon\listeners\InventoryListener$1.class
+com\pallux\junktycoon\commands\JunkResetCommand.class
 com\pallux\junktycoon\listeners\InventoryListener.class
 com\pallux\junktycoon\models\ActiveBooster.class
 com\pallux\junktycoon\config\ConfigManager.class

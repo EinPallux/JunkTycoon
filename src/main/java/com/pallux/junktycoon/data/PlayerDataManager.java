@@ -26,10 +26,6 @@ public class PlayerDataManager {
         }
     }
 
-    public PlayerData getPlayerData(Player player) {
-        return getPlayerData(player.getUniqueId());
-    }
-
     public PlayerData getPlayerData(UUID uuid) {
         PlayerData data = playerDataCache.get(uuid);
         if (data == null) {
@@ -37,6 +33,10 @@ public class PlayerDataManager {
             playerDataCache.put(uuid, data);
         }
         return data;
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        return getPlayerData(player.getUniqueId());
     }
 
     private PlayerData loadPlayerData(UUID uuid) {

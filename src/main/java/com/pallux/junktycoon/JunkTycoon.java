@@ -3,6 +3,7 @@ package com.pallux.junktycoon;
 import com.pallux.junktycoon.commands.JunkTycoonCommand;
 import com.pallux.junktycoon.commands.JunkReloadCommand;
 import com.pallux.junktycoon.commands.BoostersCommand;
+import com.pallux.junktycoon.commands.JunkResetCommand;
 import com.pallux.junktycoon.config.ConfigManager;
 import com.pallux.junktycoon.data.PlayerData;
 import com.pallux.junktycoon.data.PlayerDataManager;
@@ -101,6 +102,7 @@ public final class JunkTycoon extends JavaPlugin {
         getCommand("junktycoon").setExecutor(new JunkTycoonCommand(this));
         getCommand("junkreload").setExecutor(new JunkReloadCommand(this));
         getCommand("boosters").setExecutor(new BoostersCommand(this));
+        getCommand("junkreset").setExecutor(new JunkResetCommand(this));
     }
 
     private void startCooldownUpdateTask() {

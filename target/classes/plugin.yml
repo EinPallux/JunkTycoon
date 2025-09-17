@@ -24,6 +24,10 @@ commands:
     usage: /boosters
     aliases: [booster, shop]
     permission: junktycoon.boosters
+  junkreset:
+    description: Reset a player's JunkTycoon progression
+    usage: /junkreset <player>
+    permission: junktycoon.admin.reset
 
 permissions:
   junktycoon.use:
@@ -35,8 +39,12 @@ permissions:
   junktycoon.admin.reload:
     description: Allows reloading the plugin
     default: op
+  junktycoon.admin.reset:
+    description: Allows resetting player progression
+    default: op
   junktycoon.admin.*:
     description: Gives all admin permissions
     default: op
     children:
       - junktycoon.admin.reload
+      - junktycoon.admin.reset
