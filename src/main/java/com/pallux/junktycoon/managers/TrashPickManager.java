@@ -69,10 +69,6 @@ public class TrashPickManager {
         if (meta != null) {
             meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', tier.getName()));
             meta.setLore(createTrashPickLore(playerData, tier));
-
-            // Add cooldown indicator using durability
-            applyCooldownIndicator(item, meta, player, playerData);
-
             item.setItemMeta(meta);
         }
 

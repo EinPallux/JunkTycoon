@@ -12,11 +12,16 @@ import com.pallux.junktycoon.listeners.PlayerJoinListener;
 import com.pallux.junktycoon.listeners.InventoryListener;
 import com.pallux.junktycoon.managers.TrashPickManager;
 import com.pallux.junktycoon.managers.TrashManager;
+import org.bukkit.ChatColor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class JunkTycoon extends JavaPlugin {
 
@@ -91,76 +96,75 @@ public final class JunkTycoon extends JavaPlugin {
     }
 
     private void startCooldownUpdateTask() {
-        // Update cooldown indicators every 2 ticks (0.1 seconds) for smooth animation
+        // Update cooldown indicators every 5 ticks (0.25 seconds)
         getServer().getScheduler().runTaskTimer(this, () -> {
             for (Player player : getServer().getOnlinePlayers()) {
                 updateCooldownIndicator(player);
             }
-        }, 0L, 2L);
+        }, 0L, 5L);
     }
 
     public void updateCooldownIndicator(Player player) {
         ItemStack trashPick = player.getInventory().getItem(0);
 
-        if (trashPick != null && trashPickManager.isTrashPick(trashPick)) {
-            PlayerData playerData = playerDataManager.getPlayerData(player);
+        if (trashPick == null || !trashPickManager.isTrashPick(trashPick)) {
+            return;
+        }
 
-            // Don't update if player has bypass permission
-            if (player.hasPermission("junktycoon.admin.nocooldown")) {
-                // Remove durability damage if present
-                ItemMeta meta = trashPick.getItemMeta();
-                if (meta instanceof Damageable damageable && damageable.getDamage() > 0) {
-                    damageable.setDamage(0);
-                    meta.setUnbreakable(false);
-                    trashPick.setItemMeta(meta);
-                }
-                return;
+        PlayerData playerData = playerDataManager.getPlayerData(player);
+
+        // Don't update if player has bypass permission
+        if (player.hasPermission("junktycoon.admin.nocooldown")) {
+            removeCooldownIndicator(trashPick);
+            return;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        long lastPickTime = playerData.getLastPickTime();
+
+        // If never picked before, no cooldown
+        if (lastPickTime == 0) {
+            removeCooldownIndicator(trashPick);
+            return;
+        }
+
+        double cooldownSeconds = calculateCooldownForPlayer(playerData);
+        long cooldownMs = (long) (cooldownSeconds * 1000);
+        long timePassed = currentTime - lastPickTime;
+        long remainingMs = Math.max(0, cooldownMs - timePassed);
+
+        if (remainingMs <= 0) {
+            // Cooldown finished, remove indicator
+            removeCooldownIndicator(trashPick);
+        } else {
+            // Cooldown active, add indicator
+            applyCooldownIndicator(trashPick, remainingMs, cooldownMs);
+        }
+    }
+
+    private void removeCooldownIndicator(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            // Remove enchantment glint
+            meta.removeEnchant(Enchantment.UNBREAKING);
+
+            // Reset durability if it was changed
+            if (meta instanceof Damageable damageable && (damageable.getDamage() > 0 || meta.isUnbreakable())) {
+                damageable.setDamage(0);
+                meta.setUnbreakable(false);
             }
 
-            long currentTime = System.currentTimeMillis();
-            long lastPickTime = playerData.getLastPickTime();
+            item.setItemMeta(meta);
+        }
+    }
 
-            // If never picked before, no cooldown
-            if (lastPickTime == 0) {
-                ItemMeta meta = trashPick.getItemMeta();
-                if (meta instanceof Damageable damageable && damageable.getDamage() > 0) {
-                    damageable.setDamage(0);
-                    meta.setUnbreakable(false);
-                    trashPick.setItemMeta(meta);
-                }
-                return;
-            }
+    private void applyCooldownIndicator(ItemStack item, long remainingMs, long totalCooldownMs) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            // Add enchantment glint to indicate cooldown
+            meta.addEnchant(Enchantment.UNBREAKING, 1, true);
 
-            double cooldownSeconds = calculateCooldownForPlayer(playerData);
-            long cooldownMs = (long) (cooldownSeconds * 1000);
-            long timePassed = currentTime - lastPickTime;
-            long remainingMs = Math.max(0, cooldownMs - timePassed);
-
-            ItemMeta meta = trashPick.getItemMeta();
-
-            if (remainingMs <= 0) {
-                // Cooldown finished, remove durability damage
-                if (meta instanceof Damageable damageable && damageable.getDamage() > 0) {
-                    damageable.setDamage(0);
-                    meta.setUnbreakable(false);
-                    trashPick.setItemMeta(meta);
-                }
-            } else {
-                // Cooldown active, apply durability
-                if (meta instanceof Damageable damageable) {
-                    double cooldownPercentage = 1.0 - ((double) remainingMs / (double) cooldownMs);
-
-                    short maxDurability = trashPick.getType().getMaxDurability();
-                    if (maxDurability > 0) {
-                        short durabilityDamage = (short) (maxDurability * (1.0 - cooldownPercentage));
-                        durabilityDamage = (short) Math.min(durabilityDamage, maxDurability - 1);
-
-                        damageable.setDamage(durabilityDamage);
-                        meta.setUnbreakable(true);
-                        trashPick.setItemMeta(meta);
-                    }
-                }
-            }
+            item.setItemMeta(meta);
         }
     }
 
