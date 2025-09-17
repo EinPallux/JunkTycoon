@@ -82,6 +82,7 @@ public class JunkTycoonCommand implements CommandExecutor, TabCompleter {
         sender.sendMessage("§7Trash Multiplier: §f" + playerData.getMultiplierPerkLevel());
         sender.sendMessage("§7Trash Rarity: §f" + playerData.getRarityPerkLevel());
         sender.sendMessage("§7Point Finder: §f" + playerData.getPointFinderPerkLevel());
+        sender.sendMessage("§7XP Multiplier: §f" + playerData.getXpMultiplierPerkLevel());
 
         if (plugin.getPlayerPointsHook().isEnabled()) {
             sender.sendMessage("§7Current Points: §f" + plugin.getPlayerPointsHook().getPoints(player));

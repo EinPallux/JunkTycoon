@@ -125,6 +125,7 @@ trash_pick_lore:
   - "&7• Trash Multiplier: &f%multiplier_level%"
   - "&7• Trash Rarity: &f%rarity_level%"
   - "&7• Point Finder: &f%points_level%"
+  - "&7• XP Multiplier: &f%xp_multiplier_level%"
   - ""
   - "&e▶ Right-click to open upgrades"
   - "&e▶ Left-click to pick trash"

@@ -48,4 +48,15 @@ public class PlayerPointsHook {
         }
         return 0;
     }
+
+    public boolean takePoints(Player player, int amount) {
+        if (enabled && pointsAPI != null) {
+            int currentPoints = pointsAPI.look(player.getUniqueId());
+            if (currentPoints >= amount) {
+                pointsAPI.take(player.getUniqueId(), amount);
+                return true;
+            }
+        }
+        return false;
+    }
 }

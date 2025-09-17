@@ -160,6 +160,7 @@ public class TrashPickManager {
             line = line.replace("%multiplier_level%", String.valueOf(playerData.getMultiplierPerkLevel()));
             line = line.replace("%rarity_level%", String.valueOf(playerData.getRarityPerkLevel()));
             line = line.replace("%points_level%", String.valueOf(playerData.getPointFinderPerkLevel()));
+            line = line.replace("%xp_multiplier_level%", String.valueOf(playerData.getXpMultiplierPerkLevel()));
 
             lore.add(ChatColor.translateAlternateColorCodes('&', line));
         }
@@ -216,9 +217,18 @@ public class TrashPickManager {
         return baseXP + (level * multiplier);
     }
 
-    public int getXPForTrashType(String trashTypeId) {
+    public int getXPForTrashType(String trashTypeId, PlayerData playerData) {
         FileConfiguration config = plugin.getConfigManager().getMainConfig();
-        return config.getInt("xp." + trashTypeId, 1);
+        int baseXP = config.getInt("xp." + trashTypeId, 1);
+
+        // Apply XP multiplier perk
+        int xpMultiplierLevel = playerData.getXpMultiplierPerkLevel();
+        if (xpMultiplierLevel > 0) {
+            int xpBonus = config.getInt("perks.xp_multiplier.xp_bonus", 1);
+            baseXP += (xpMultiplierLevel * xpBonus);
+        }
+
+        return baseXP;
     }
 
     public boolean canLevelUp(PlayerData playerData) {

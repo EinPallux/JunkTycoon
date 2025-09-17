@@ -92,7 +92,7 @@ public class PlayerInteractListener implements Listener {
 
         int xpGain = 0;
         if (canGainXP) {
-            xpGain = plugin.getTrashPickManager().getXPForTrashType(trashType.getId()) * trashAmount;
+            xpGain = plugin.getTrashPickManager().getXPForTrashType(trashType.getId(), playerData) * trashAmount;
             playerData.addXP(xpGain);
 
             // Check for level up

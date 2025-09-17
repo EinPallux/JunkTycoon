@@ -17,6 +17,7 @@ public class PlayerData {
     private int multiplierPerkLevel;
     private int rarityPerkLevel;
     private int pointFinderPerkLevel;
+    private int xpMultiplierPerkLevel;
 
     // Statistics
     private int totalTrashPicked;
@@ -93,6 +94,14 @@ public class PlayerData {
 
     public void setPointFinderPerkLevel(int pointFinderPerkLevel) {
         this.pointFinderPerkLevel = pointFinderPerkLevel;
+    }
+
+    public int getXpMultiplierPerkLevel() {
+        return xpMultiplierPerkLevel;
+    }
+
+    public void setXpMultiplierPerkLevel(int xpMultiplierPerkLevel) {
+        this.xpMultiplierPerkLevel = xpMultiplierPerkLevel;
     }
 
     public int getTotalTrashPicked() {

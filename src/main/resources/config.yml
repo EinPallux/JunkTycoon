@@ -113,6 +113,15 @@ perks:
     min_points: 1
     max_points: 5
 
+  xp_multiplier:
+    enabled: true
+    name: "&dXP Multiplier"
+    description: "&7Increases XP gained from trash"
+    max_level: 20
+    base_cost: 50  # PlayerPoints cost
+    cost_multiplier: 1.8
+    xp_bonus: 1  # +1 XP per level
+
 # Database Settings
 database:
   type: "YAML"  # Currently only YAML is supported

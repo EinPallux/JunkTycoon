@@ -34,6 +34,7 @@ public class UpgradeGUI implements Listener {
     private static final int MULTIPLIER_SLOT = 12;
     private static final int RARITY_SLOT = 14;
     private static final int POINTS_SLOT = 16;
+    private static final int XP_MULTIPLIER_SLOT = 28;
     private static final int UPGRADE_PICK_SLOT = 31;
 
     public UpgradeGUI(JunkTycoon plugin, Player player) {
@@ -65,8 +66,11 @@ public class UpgradeGUI implements Listener {
         // Add points perk only if PlayerPoints is enabled
         if (plugin.getPlayerPointsHook().isEnabled()) {
             addPerkItem(POINTS_SLOT, "point_finder", Material.NETHER_STAR, playerData.getPointFinderPerkLevel());
+            // Use custom method for XP Multiplier that handles PlayerPoints
+            addXPMultiplierPerkItem();
         } else {
             addDisabledPerkItem(POINTS_SLOT, "point_finder", Material.BARRIER);
+            addDisabledPerkItem(XP_MULTIPLIER_SLOT, "xp_multiplier", Material.BARRIER);
         }
 
         // Add trash pick upgrade item
@@ -130,6 +134,84 @@ public class UpgradeGUI implements Listener {
         }
 
         inventory.setItem(slot, item);
+    }
+
+    private void addXPMultiplierPerkItem() {
+        FileConfiguration config = plugin.getConfigManager().getMainConfig();
+
+        if (!config.getBoolean("perks.xp_multiplier.enabled", true)) {
+            addDisabledPerkItem(XP_MULTIPLIER_SLOT, "xp_multiplier", Material.BARRIER);
+            return;
+        }
+
+        int currentLevel = playerData.getXpMultiplierPerkLevel();
+        int maxLevel = config.getInt("perks.xp_multiplier.max_level");
+        int baseCost = config.getInt("perks.xp_multiplier.base_cost");
+        double multiplier = config.getDouble("perks.xp_multiplier.cost_multiplier");
+
+        ItemStack item = new ItemStack(Material.EXPERIENCE_BOTTLE);
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            String perkName = plugin.getConfigManager().formatText(config.getString("perks.xp_multiplier.name"));
+            String description = plugin.getConfigManager().formatText(config.getString("perks.xp_multiplier.description"));
+
+            // Determine item state
+            if (currentLevel >= maxLevel) {
+                // Maxed perk
+                meta.setDisplayName(plugin.getConfigManager().getMessage("upgrade_gui.perk_maxed")
+                        .replace("%perk_name%", perkName));
+                meta.setLore(createXPMultiplierLore("perk_lore_maxed", description, currentLevel, maxLevel, 0));
+            } else if (currentLevel == 0) {
+                // Locked perk
+                meta.setDisplayName(plugin.getConfigManager().getMessage("upgrade_gui.perk_locked")
+                        .replace("%perk_name%", perkName));
+                int cost = baseCost;
+                meta.setLore(createXPMultiplierLore("perk_lore_locked", description, currentLevel, maxLevel, cost));
+            } else {
+                // Unlocked perk
+                meta.setDisplayName(plugin.getConfigManager().getMessage("upgrade_gui.perk_unlocked")
+                        .replace("%perk_name%", perkName)
+                        .replace("%level%", String.valueOf(currentLevel)));
+                int cost = (int) (baseCost * Math.pow(multiplier, currentLevel));
+                meta.setLore(createXPMultiplierLore("perk_lore", description, currentLevel, maxLevel, cost));
+            }
+
+            item.setItemMeta(meta);
+        }
+
+        inventory.setItem(XP_MULTIPLIER_SLOT, item);
+    }
+
+    private List<String> createXPMultiplierLore(String templateKey, String description, int currentLevel, int maxLevel, int cost) {
+        List<String> lore = new ArrayList<>();
+
+        // Create custom lore for PlayerPoints perk instead of using templates
+        lore.add("§7" + description);
+        lore.add("");
+
+        if (templateKey.equals("perk_lore_maxed")) {
+            lore.add("§7Level: §6MAX");
+            lore.add("");
+            lore.add("§c✗ Already maxed out!");
+        } else if (templateKey.equals("perk_lore_locked")) {
+            lore.add("§7Level: §c0§7/§f" + maxLevel);
+            lore.add("§7Cost to unlock: §9" + cost + " Points");
+            lore.add("");
+            lore.add("§e▶ Click to unlock!");
+        } else {
+            lore.add("§7Current Level: §f" + currentLevel + "§7/§f" + maxLevel);
+            lore.add("§7Cost to upgrade: §9" + cost + " Points");
+            lore.add("");
+            lore.add("§e▶ Click to upgrade!");
+        }
+
+        // Apply color formatting to all lines
+        for (int i = 0; i < lore.size(); i++) {
+            lore.set(i, plugin.getConfigManager().formatText(lore.get(i)));
+        }
+
+        return lore;
     }
 
     private void addDisabledPerkItem(int slot, String perkId, Material material) {
@@ -254,6 +336,11 @@ public class UpgradeGUI implements Listener {
                     handlePerkUpgrade("point_finder");
                 }
             }
+            case XP_MULTIPLIER_SLOT -> {
+                if (plugin.getPlayerPointsHook().isEnabled()) {
+                    handleXPMultiplierUpgrade();
+                }
+            }
             case UPGRADE_PICK_SLOT -> handleTrashPickUpgrade();
         }
     }
@@ -291,6 +378,50 @@ public class UpgradeGUI implements Listener {
 
         // Send success message
         String perkName = plugin.getConfigManager().formatText(config.getString("perks." + perkId + ".name"));
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("perk_name", perkName);
+        placeholders.put("level", String.valueOf(currentLevel + 1));
+        player.sendMessage(plugin.getConfigManager().getMessage("success.perk_upgraded", placeholders));
+
+        // Update GUI and trash pick
+        setupGUI();
+        plugin.getTrashPickManager().updateTrashPickInInventory(player);
+        plugin.getPlayerDataManager().savePlayerData(player);
+    }
+
+    private void handleXPMultiplierUpgrade() {
+        FileConfiguration config = plugin.getConfigManager().getMainConfig();
+
+        if (!config.getBoolean("perks.xp_multiplier.enabled", true)) {
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + "§cThis perk is disabled!");
+            return;
+        }
+
+        int currentLevel = playerData.getXpMultiplierPerkLevel();
+        int maxLevel = config.getInt("perks.xp_multiplier.max_level");
+
+        if (currentLevel >= maxLevel) {
+            player.sendMessage(plugin.getConfigManager().getMessage("errors.perk_maxed"));
+            return;
+        }
+
+        int baseCost = config.getInt("perks.xp_multiplier.base_cost");
+        double multiplier = config.getDouble("perks.xp_multiplier.cost_multiplier");
+        int cost = currentLevel == 0 ? baseCost : (int) (baseCost * Math.pow(multiplier, currentLevel));
+
+        int currentPoints = plugin.getPlayerPointsHook().getPoints(player);
+        if (currentPoints < cost) {
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
+                    "§cYou don't have enough Points! Required: §9" + cost + " Points");
+            return;
+        }
+
+        // Purchase successful
+        plugin.getPlayerPointsHook().takePoints(player, cost);
+        playerData.setXpMultiplierPerkLevel(currentLevel + 1);
+
+        // Send success message
+        String perkName = plugin.getConfigManager().formatText(config.getString("perks.xp_multiplier.name"));
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("perk_name", perkName);
         placeholders.put("level", String.valueOf(currentLevel + 1));
@@ -346,6 +477,7 @@ public class UpgradeGUI implements Listener {
             case "trash_multiplier" -> playerData.getMultiplierPerkLevel();
             case "trash_rarity" -> playerData.getRarityPerkLevel();
             case "point_finder" -> playerData.getPointFinderPerkLevel();
+            case "xp_multiplier" -> playerData.getXpMultiplierPerkLevel();
             default -> 0;
         };
     }
@@ -356,6 +488,7 @@ public class UpgradeGUI implements Listener {
             case "trash_multiplier" -> playerData.setMultiplierPerkLevel(newLevel);
             case "trash_rarity" -> playerData.setRarityPerkLevel(newLevel);
             case "point_finder" -> playerData.setPointFinderPerkLevel(newLevel);
+            case "xp_multiplier" -> playerData.setXpMultiplierPerkLevel(newLevel);
         }
     }
 
