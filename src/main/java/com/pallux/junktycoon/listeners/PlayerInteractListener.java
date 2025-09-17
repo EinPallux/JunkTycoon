@@ -161,7 +161,10 @@ public class PlayerInteractListener implements Listener {
         // Title and subtitle
         Map<String, String> placeholders = new HashMap<>();
         placeholders.put("amount", String.valueOf(amount));
-        placeholders.put("rarity", trashType.getFormattedName());
+
+        // Format the rarity name with colors properly
+        String formattedRarityName = plugin.getConfigManager().formatText(trashType.getName());
+        placeholders.put("rarity", formattedRarityName);
         placeholders.put("value", String.valueOf(value));
 
         String title = plugin.getConfigManager().getMessage("trash_finding.found_title", placeholders);
