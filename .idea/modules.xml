@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/JunkTycoon.iml" filepath="$PROJECT_DIR$/JunkTycoon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/JunkTycoon.iml" filepath="$PROJECT_DIR$/.idea/JunkTycoon.iml" />
     </modules>
   </component>
 </project>

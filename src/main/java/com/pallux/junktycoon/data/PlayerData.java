@@ -160,6 +160,7 @@ public class PlayerData {
     public void upgradeTier(String newTier) {
         this.trashPickTier = newTier;
         this.trashPickLevel = 1;  // Reset level when upgrading tier
-        // Keep XP and perks
+        this.trashPickXP = 0;     // Reset XP when upgrading tier for clean progression
+        // Keep perks intact
     }
 }
