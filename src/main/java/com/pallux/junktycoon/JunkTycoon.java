@@ -70,7 +70,8 @@ public final class JunkTycoon extends JavaPlugin {
         // Start cooldown update task
         startCooldownUpdateTask();
 
-        getLogger().info("JunkTycoon has been enabled!");
+        String enableMessage = configManager.getMessage("general.plugin_enabled");
+        getLogger().info(ChatColor.stripColor(enableMessage));
     }
 
     @Override
@@ -84,7 +85,8 @@ public final class JunkTycoon extends JavaPlugin {
         if (placeholderAPIHook != null) {
             placeholderAPIHook.shutdown();
         }
-        getLogger().info("JunkTycoon has been disabled!");
+        String disableMessage = configManager.getMessage("general.plugin_disabled");
+        getLogger().info(ChatColor.stripColor(disableMessage));
     }
 
     private void setupHooks() {

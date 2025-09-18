@@ -45,8 +45,8 @@ public class PrestigeCommand implements CommandExecutor, TabCompleter {
         }
 
         // Invalid arguments
-        player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                "§cUsage: /prestige [confirm]");
+        String message = plugin.getConfigManager().getMessage("prestige.usage");
+        player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
         return true;
     }
 
@@ -66,8 +66,8 @@ public class PrestigeCommand implements CommandExecutor, TabCompleter {
             // Success is handled in PrestigeManager with effects and announcements
             return true;
         } else {
-            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cFailed to prestige. Please try again.");
+            String message = plugin.getConfigManager().getMessage("prestige.prestige_failed");
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             return true;
         }
     }

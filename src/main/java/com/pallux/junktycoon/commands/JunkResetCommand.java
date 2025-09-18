@@ -10,7 +10,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -39,7 +41,7 @@ public class JunkResetCommand implements CommandExecutor, TabCompleter {
         if (args.length == 1) {
             return showResetConfirmation(sender, targetPlayerName);
         } else if (args.length == 2 && args[1].equalsIgnoreCase("confirm")) {
-            return executeReset(sender, targetPlayerName);
+            return handleConfirmedReset(sender, targetPlayerName);
         } else {
             sendUsageMessage(sender);
             return true;
@@ -47,62 +49,104 @@ public class JunkResetCommand implements CommandExecutor, TabCompleter {
     }
 
     private void sendUsageMessage(CommandSender sender) {
-        sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                "§cUsage: /junkreset <player> [confirm]");
+        String message = plugin.getConfigManager().getMessage("reset.usage");
+        sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
     }
 
     private boolean showResetConfirmation(CommandSender sender, String targetPlayerName) {
         // Check if player exists
         if (!doesPlayerExist(targetPlayerName)) {
-            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cPlayer '" + targetPlayerName + "' not found or has never played before!");
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("player", targetPlayerName);
+            String message = plugin.getConfigManager().getMessage("reset.player_not_found", placeholders);
+            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             return true;
         }
 
         // Show confirmation warning
         String prefix = plugin.getConfigManager().getMessage("general.prefix");
-        sender.sendMessage(prefix + "§e⚠ WARNING: This will completely reset " + targetPlayerName + "'s JunkTycoon progress!");
-        sender.sendMessage("§7This will reset:");
-        sender.sendMessage("§7▪ Trash pick tier and level");
-        sender.sendMessage("§7▪ All perk levels (Cooldown, Multiplier, Rarity, etc.)");
-        sender.sendMessage("§7▪ XP and progression");
-        sender.sendMessage("§7▪ Statistics (trash picked, money earned)");
-        sender.sendMessage("");
-        sender.sendMessage("§c⚠ This action CANNOT be undone!");
-        sender.sendMessage("");
-        sender.sendMessage("§aTo confirm this reset, run:");
-        sender.sendMessage("§f/junkreset " + targetPlayerName + " confirm");
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("player", targetPlayerName);
+        String warningTitle = plugin.getConfigManager().getMessage("reset.warning_title", placeholders);
+        sender.sendMessage(prefix + warningTitle);
+
+        List<String> warningDetails = plugin.getConfigManager().getMessagesConfig().getStringList("reset.warning_details");
+        for (String line : warningDetails) {
+            line = line.replace("%player%", targetPlayerName);
+            sender.sendMessage(plugin.getConfigManager().formatText(line));
+        }
 
         return true;
     }
 
-    private boolean executeReset(CommandSender sender, String targetPlayerName) {
+    private boolean handleConfirmedReset(CommandSender sender, String targetPlayerName) {
+        // Get player UUID
         UUID targetUUID = getPlayerUUID(targetPlayerName);
         if (targetUUID == null) {
-            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cPlayer '" + targetPlayerName + "' not found!");
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("player", targetPlayerName);
+            String message = plugin.getConfigManager().getMessage("reset.player_not_found", placeholders);
+            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             return true;
         }
 
+        // Perform the reset
+        performReset(sender, targetPlayerName, targetUUID);
+        return true;
+    }
+
+    private boolean doesPlayerExist(String playerName) {
+        Player onlinePlayer = Bukkit.getPlayer(playerName);
+        if (onlinePlayer != null) {
+            return true;
+        }
+
+        var offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+        if (offlinePlayer.hasPlayedBefore()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private UUID getPlayerUUID(String playerName) {
+        // Try online player first
+        Player onlinePlayer = Bukkit.getPlayer(playerName);
+        if (onlinePlayer != null) {
+            return onlinePlayer.getUniqueId();
+        }
+
+        // Try offline player
+        var offlinePlayer = Bukkit.getOfflinePlayer(playerName);
+        if (offlinePlayer.hasPlayedBefore()) {
+            return offlinePlayer.getUniqueId();
+        }
+
+        return null;
+    }
+
+    private void performReset(CommandSender sender, String targetPlayerName, UUID targetUUID) {
         try {
             // Perform the reset
             performPlayerReset(targetUUID, targetPlayerName);
 
             // Notify admin of success
-            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§a✓ Successfully reset " + targetPlayerName + "'s JunkTycoon progression!");
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("player", targetPlayerName);
+            String message = plugin.getConfigManager().getMessage("reset.reset_success", placeholders);
+            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
 
             // Log the action
             plugin.getLogger().info("[ADMIN] " + sender.getName() + " reset JunkTycoon data for player: " + targetPlayerName + " (UUID: " + targetUUID + ")");
 
         } catch (Exception e) {
-            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cAn error occurred while resetting player data: " + e.getMessage());
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("error", e.getMessage());
+            String message = plugin.getConfigManager().getMessage("reset.reset_error", placeholders);
+            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             plugin.getLogger().severe("Failed to reset player " + targetPlayerName + ": " + e.getMessage());
             e.printStackTrace();
         }
-
-        return true;
     }
 
     private void performPlayerReset(UUID playerUUID, String playerName) {
@@ -147,38 +191,11 @@ public class JunkResetCommand implements CommandExecutor, TabCompleter {
 
         // Notify the player
         String prefix = plugin.getConfigManager().getMessage("general.prefix");
-        player.sendMessage("");
-        player.sendMessage(prefix + "§c⚠ Your JunkTycoon progression has been reset by an administrator!");
-        player.sendMessage("§7All your progress has been cleared and you're starting fresh.");
-        player.sendMessage("§7You have been given a new §aStarter Pick §7to begin your journey again!");
-        player.sendMessage("");
-    }
+        List<String> notificationLines = plugin.getConfigManager().getMessagesConfig().getStringList("reset.player_notification");
 
-    private boolean doesPlayerExist(String playerName) {
-        // Check if player is online
-        Player onlinePlayer = Bukkit.getPlayer(playerName);
-        if (onlinePlayer != null) {
-            return true;
+        for (String line : notificationLines) {
+            player.sendMessage(plugin.getConfigManager().formatText(line));
         }
-
-        // Check if player has played before (offline player)
-        return Bukkit.getOfflinePlayer(playerName).hasPlayedBefore();
-    }
-
-    private UUID getPlayerUUID(String playerName) {
-        // Try online player first
-        Player onlinePlayer = Bukkit.getPlayer(playerName);
-        if (onlinePlayer != null) {
-            return onlinePlayer.getUniqueId();
-        }
-
-        // Try offline player
-        var offlinePlayer = Bukkit.getOfflinePlayer(playerName);
-        if (offlinePlayer.hasPlayedBefore()) {
-            return offlinePlayer.getUniqueId();
-        }
-
-        return null;
     }
 
     @Override

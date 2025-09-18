@@ -32,8 +32,8 @@ public class BoostersCommand implements CommandExecutor, TabCompleter {
         }
 
         if (!plugin.getPlayerPointsHook().isEnabled()) {
-            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cPlayerPoints plugin is required to use the booster shop!");
+            String message = plugin.getConfigManager().getMessage("requirements.playerpoints_required");
+            sender.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             return true;
         }
 

@@ -39,9 +39,18 @@ public class PlayerInteractListener implements Listener {
 
         Action action = event.getAction();
 
-        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+        if (action == Action.LEFT_CLICK_AIR) {
+            // Only trigger on left click air - this prevents block spam exploitation
             event.setCancelled(true);
             handleTrashPicking(player);
+        } else if (action == Action.LEFT_CLICK_BLOCK) {
+            // Cancel block breaking with trash pick and prevent exploitation
+            event.setCancelled(true);
+
+            // Inform player that they need to left click air
+            String message = plugin.getConfigManager().getMessage("trash_picking.left_click_air_instruction");
+            player.sendActionBar(message);
+
         } else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
             event.setCancelled(true);
             openUpgradeGUI(player);

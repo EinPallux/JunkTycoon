@@ -7,6 +7,12 @@ general:
   no_permission: "&cYou don't have permission to do that!"
   player_only: "&cThis command can only be used by players!"
   reload_success: "&aJunkTycoon has been reloaded successfully!"
+  plugin_enabled: "JunkTycoon has been enabled!"
+  plugin_disabled: "JunkTycoon has been disabled!"
+
+# Trash Picking Messages
+trash_picking:
+  left_click_air_instruction: "&c⚠ Left click in the air to pick trash!"
 
 # Trash Finding Messages
 trash_finding:
@@ -27,6 +33,17 @@ trash_finding:
 
   # Level up message
   level_up: "&6&lLEVEL UP! &7Your trash pick is now level &a%level%&7!"
+
+# Inventory Protection Messages
+inventory:
+  cannot_drop_trash_pick: "&cYou cannot drop your trash pick!"
+  cannot_move_from_slot: "&cYou cannot move your trash pick from this slot!"
+  trash_pick_must_stay: "&cYour trash pick must stay in slot %slot%!"
+  slot_reserved: "&cThis slot is reserved for your trash pick!"
+  cannot_move_to_offhand: "&cYou cannot move your trash pick to your offhand!"
+  moved_back_to_slot: "&eYour trash pick has been moved back to slot %slot%!"
+  duplicates_removed: "&cDuplicate trash picks have been removed!"
+  trash_pick_restored: "&aYour trash pick has been restored!"
 
 # Points (PlayerPoints) Messages
 points:
@@ -113,6 +130,58 @@ errors:
 success:
   perk_upgraded: "&aSuccessfully upgraded %perk_name% &ato level &f%level%&a!"
   pick_upgraded: "&aSuccessfully upgraded your trash pick to &f%pick_name%&a!"
+
+# Plugin Requirements
+requirements:
+  playerpoints_required: "&cPlayerPoints plugin is required to use this feature!"
+  vault_required: "&cVault plugin is required to use this feature!"
+
+# Reset Command Messages
+reset:
+  usage: "&cUsage: /junkreset <player> [confirm]"
+  player_not_found: "&cPlayer '%player%' not found or has never played before!"
+  warning_title: "&e⚠ WARNING: This will completely reset %player%'s JunkTycoon progress!"
+  warning_details:
+    - "&7This will reset:"
+    - "&7▪ Trash pick tier and level"
+    - "&7▪ All perk levels (Cooldown, Multiplier, Rarity, etc.)"
+    - "&7▪ XP and progression"
+    - "&7▪ Statistics (trash picked, money earned)"
+    - ""
+    - "&c⚠ This action CANNOT be undone!"
+    - ""
+    - "&aTo confirm this reset, run:"
+    - "&f/junkreset %player% confirm"
+  reset_success: "&a✓ Successfully reset %player%'s JunkTycoon progression!"
+  reset_error: "&cAn error occurred while resetting player data: %error%"
+  player_notification:
+    - ""
+    - "&c⚠ Your JunkTycoon progression has been reset by an administrator!"
+    - "&7All your progress has been cleared and you're starting fresh."
+    - "&7You have been given a new &aStarter Pick &7to begin your journey again!"
+    - ""
+
+# Prestige Messages
+prestige:
+  usage: "&cUsage: /prestige [confirm]"
+  confirmation_title: "&e⚠ PRESTIGE CONFIRMATION ⚠"
+  confirmation_details:
+    - "&7You are about to prestige to level &6%next_level%&7!"
+    - ""
+    - "&cThis will reset:"
+    - "&c• Your trash pick back to Starter Pick (Tier 1, Level 1)"
+    - "&c• All your perk levels to 0"
+    - "&c• Your XP progress"
+    - ""
+    - "&aYou will gain:"
+    - "&a• +%money_bonus%% permanent money bonus"
+    - "&a• +%xp_bonus% permanent XP bonus"
+    - ""
+    - "&7Your statistics will be kept."
+    - ""
+    - "&6Type 'prestige confirm' in chat to proceed!"
+    - "&7Or reopen /prestige to cancel."
+  prestige_failed: "&cFailed to prestige. Please try again."
 
 # Trash Pick Lore
 trash_pick_lore:

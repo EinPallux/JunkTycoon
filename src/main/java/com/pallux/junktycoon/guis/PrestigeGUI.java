@@ -234,25 +234,19 @@ public class PrestigeGUI implements Listener {
         player.closeInventory();
 
         String prefix = plugin.getConfigManager().getMessage("general.prefix");
+        String confirmationTitle = plugin.getConfigManager().getMessage("prestige.confirmation_title");
         player.sendMessage("");
-        player.sendMessage(prefix + "§e⚠ PRESTIGE CONFIRMATION ⚠");
-        player.sendMessage("§7You are about to prestige to level §6" + nextPrestige + "§7!");
-        player.sendMessage("");
-        player.sendMessage("§cThis will reset:");
-        player.sendMessage("§c• Your trash pick back to Starter Pick (Tier 1, Level 1)");
-        player.sendMessage("§c• All your perk levels to 0");
-        player.sendMessage("§c• Your XP progress");
-        player.sendMessage("");
-        player.sendMessage("§aYou will gain:");
-        player.sendMessage("§a• +" + plugin.getPrestigeManager().getMoneyBonusPercentage(nextPrestige) + "% permanent money bonus");
-        if (nextPrestige >= plugin.getPrestigeManager().getXPMultiplierStartLevel()) {
-            player.sendMessage("§a• +" + plugin.getPrestigeManager().getXPBonus(nextPrestige) + " permanent XP bonus");
+        player.sendMessage(prefix + confirmationTitle);
+
+        List<String> confirmationDetails = plugin.getConfigManager().getMessagesConfig().getStringList("prestige.confirmation_details");
+
+        for (String line : confirmationDetails) {
+            line = line.replace("%next_level%", String.valueOf(nextPrestige));
+            line = line.replace("%money_bonus%", plugin.getPrestigeManager().getMoneyBonusPercentage(nextPrestige));
+            line = line.replace("%xp_bonus%", String.valueOf(plugin.getPrestigeManager().getXPBonus(nextPrestige)));
+
+            player.sendMessage(plugin.getConfigManager().formatText(line));
         }
-        player.sendMessage("");
-        player.sendMessage("§7Your statistics will be kept.");
-        player.sendMessage("");
-        player.sendMessage("§6Type 'prestige confirm' in chat to proceed!");
-        player.sendMessage("§7Or reopen /prestige to cancel.");
 
         // Set a flag that this player is in prestige confirmation mode
         // We'll handle this in a chat listener or add it to player data temporarily

@@ -13,6 +13,9 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class InventoryListener implements Listener {
 
     private final JunkTycoon plugin;
@@ -27,8 +30,8 @@ public class InventoryListener implements Listener {
 
         if (plugin.getTrashPickManager().isTrashPick(item)) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cYou cannot drop your trash pick!");
+            String message = plugin.getConfigManager().getMessage("inventory.cannot_drop_trash_pick");
+            event.getPlayer().sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
         }
     }
 
@@ -45,8 +48,8 @@ public class InventoryListener implements Listener {
         if (event.getSlot() == lockedSlot && event.getClickedInventory() == player.getInventory()) {
             if (currentItem != null && plugin.getTrashPickManager().isTrashPick(currentItem)) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                        "§cYou cannot move your trash pick from this slot!");
+                String message = plugin.getConfigManager().getMessage("inventory.cannot_move_from_slot");
+                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
                 return;
             }
         }
@@ -55,8 +58,10 @@ public class InventoryListener implements Listener {
         if (cursorItem != null && plugin.getTrashPickManager().isTrashPick(cursorItem)) {
             if (event.getSlot() != lockedSlot || event.getClickedInventory() != player.getInventory()) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                        "§cYour trash pick must stay in slot " + (lockedSlot + 1) + "!");
+                Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("slot", String.valueOf(lockedSlot + 1));
+                String message = plugin.getConfigManager().getMessage("inventory.trash_pick_must_stay", placeholders);
+                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
                 return;
             }
         }
@@ -65,8 +70,8 @@ public class InventoryListener implements Listener {
         if (event.getSlot() == lockedSlot && event.getClickedInventory() == player.getInventory()) {
             if (cursorItem != null && !plugin.getTrashPickManager().isTrashPick(cursorItem)) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                        "§cThis slot is reserved for your trash pick!");
+                String message = plugin.getConfigManager().getMessage("inventory.slot_reserved");
+                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             }
         }
     }
@@ -83,8 +88,8 @@ public class InventoryListener implements Listener {
 
             if (draggedItem != null && !plugin.getTrashPickManager().isTrashPick(draggedItem)) {
                 event.setCancelled(true);
-                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                        "§cThis slot is reserved for your trash pick!");
+                String message = plugin.getConfigManager().getMessage("inventory.slot_reserved");
+                player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
             }
         }
     }
@@ -98,8 +103,8 @@ public class InventoryListener implements Listener {
         // Prevent swapping trash pick to offhand
         if (mainHand != null && plugin.getTrashPickManager().isTrashPick(mainHand)) {
             event.setCancelled(true);
-            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cYou cannot move your trash pick to your offhand!");
+            String message = plugin.getConfigManager().getMessage("inventory.cannot_move_to_offhand");
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
         }
 
         // Prevent swapping trash pick from offhand to main hand (shouldn't happen, but just in case)
@@ -146,8 +151,10 @@ public class InventoryListener implements Listener {
                         // Move trash pick back to locked slot
                         player.getInventory().setItem(lockedSlot, item);
 
-                        player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                                "§eYour trash pick has been moved back to slot " + (lockedSlot + 1) + "!");
+                        Map<String, String> placeholders = new HashMap<>();
+                        placeholders.put("slot", String.valueOf(lockedSlot + 1));
+                        String message = plugin.getConfigManager().getMessage("inventory.moved_back_to_slot", placeholders);
+                        player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
                         return;
                     }
                 }
@@ -155,8 +162,8 @@ public class InventoryListener implements Listener {
 
             // If no trash pick found anywhere, give a new one
             plugin.getTrashPickManager().giveTrashPick(player);
-            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§aYour trash pick has been restored!");
+            String message = plugin.getConfigManager().getMessage("inventory.trash_pick_restored");
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
         }
 
         // Remove any duplicate trash picks from other slots
@@ -178,8 +185,8 @@ public class InventoryListener implements Listener {
         }
 
         if (foundDuplicates) {
-            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") +
-                    "§cDuplicate trash picks have been removed!");
+            String message = plugin.getConfigManager().getMessage("inventory.duplicates_removed");
+            player.sendMessage(plugin.getConfigManager().getMessage("general.prefix") + message);
         }
     }
 }
